@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri des mots - Éthique et IA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 20px;
+        }
+        .category {
+            width: 300px;
+            min-height: 300px;
+            border: 2px dashed #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        .word {
+            padding: 10px;
+            margin: 5px;
+            background-color: lightblue;
+            border-radius: 5px;
+            cursor: grab;
+        }
+        .incorrect {
+            background-color: red !important;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Classe les mots dans la bonne catégorie</h2>
+    <p>Glisse les mots dans la bonne boîte : « Principes éthiques de l'IA » ou « Autres concepts liés à l'IA »</p>
+    
+    <div id="wordContainer">
+        <div class="word" draggable="true">Équité</div>
+        <div class="word" draggable="true">Justice</div>
+        <div class="word" draggable="true">Biais</div>
+        <div class="word" draggable="true">Respect</div>
+        <div class="word" draggable="true">Sécurité</div>
+        <div class="word" draggable="true">Vie privée</div>
+        <div class="word" draggable="true">Transparence</div>
+        <div class="word" draggable="true">Responsabilité</div>
+        <div class="word" draggable="true">Fiabilité</div>
+        <div class="word" draggable="true">Droits humains</div>
+        <div class="word" draggable="true">Inclusion</div>
+        <div class="word" draggable="true">Discrimination</div>
+        <div class="word" draggable="true">Optimisation</div>
+        <div class="word" draggable="true">Automatisation</div>
+        <div class="word" draggable="true">Big Data</div>
+        <div class="word" draggable="true">Machine Learning</div>
+        <div class="word" draggable="true">Précision</div>
+    </div>
+    
+    <div class="container">
+        <div class="category" id="ethical">
+            <h3>Principes éthiques de l'IA</h3>
+        </div>
+        <div class="category" id="technical">
+            <h3>Autres concepts liés à l'IA</h3>
+        </div>
+    </div>
+    
+    <script>
+        const correctEthical = ["Équité", "Justice", "Biais", "Respect", "Sécurité", "Vie privée", "Transparence", "Responsabilité", "Fiabilité", "Droits humains", "Inclusion", "Discrimination"];
+        const correctTechnical = ["Optimisation", "Automatisation", "Big Data", "Machine Learning", "Précision"];
+        
+        const words = document.querySelectorAll('.word');
+        const categories = document.querySelectorAll('.category');
+        
+        words.forEach(word => {
+            word.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text', e.target.innerText);
+                e.target.style.opacity = '0.5';
+            });
+            word.addEventListener('dragend', (e) => {
+                e.target.style.opacity = '1';
+            });
+        });
+        
+        categories.forEach(category => {
+            category.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            category.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const data = e.dataTransfer.getData('text');
+                const droppedWord = Array.from(words).find(w => w.innerText === data);
+                if (droppedWord) {
+                    category.appendChild(droppedWord);
+                    
+                    if ((category.id === "ethical" && !correctEthical.includes(data)) || 
+                        (category.id === "technical" && !correctTechnical.includes(data))) {
+                        droppedWord.classList.add("incorrect");
+                    } else {
+                        droppedWord.classList.remove("incorrect");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
